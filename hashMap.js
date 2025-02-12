@@ -1,4 +1,4 @@
-import { LinkedList } from "./linkedList";
+import { ModifiedLinkedList } from "./modifiedLinkedList";
 
 class HashMap {
     #loadFactor;
@@ -9,7 +9,7 @@ class HashMap {
         this.#loadFactor = 0.75;
         this.#capacity = 16;
         this.#buckets = [];
-        for (let i = 0; i < this.#capacity; i++) { this.#buckets.push([]) };
+        for (let i = 0; i < this.#capacity; i++) { this.#buckets.push(new ModifiedLinkedList()) };
     }
 
     hash(key) {
@@ -28,15 +28,15 @@ class HashMap {
         if (index < 0 || index >= buckets.length) {
             throw new Error("Trying to access index out of bounds");
         }
-        this.#buckets[index].push(value);
+        this.#buckets[index].append(key, value);
     }
 
     get(key) {
         const index = hash(key);
-        if (index < 0 || index >= buckets.length) {
+        if (index < 0 || index >= this.#buckets.length) {
             throw new Error("Trying to access index out of bounds");
         }
-        return this.#buckets[index][0];
+        return this.#buckets[index].at(this.#buckets[index].findWithKey(key));
     }
 
     has(key) {
@@ -44,10 +44,10 @@ class HashMap {
         if (index < 0 || index >= buckets.length) {
             throw new Error("Trying to access index out of bounds");
         }
-        return this.#buckets[index].includes(value);
+        return this.#buckets[index].containsWithKey(key);
     }
 
-    remove(key) {
+    remove(key) { // TODO: this and the future stuff
         const index = hash(key);
         if (index < 0 || index >= buckets.length) {
             throw new Error("Trying to access index out of bounds");
@@ -60,7 +60,8 @@ class HashMap {
     }
 
     clear() {
-
+        this.#buckets = [];
+        for (let i = 0; i < this.#capacity; i++) { this.#buckets.push(new ModifiedLinkedList()) };
     }
 
     keys() {
@@ -72,7 +73,7 @@ class HashMap {
     }
 
     entries() {
-
+        
     }
      
 }

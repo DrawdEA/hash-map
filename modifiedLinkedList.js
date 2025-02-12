@@ -129,6 +129,28 @@ class LinkedList {
         return found;
     }
 
+    containsWithKey(key) {
+        let found = false;
+
+        if (this.#headNode !== null) {
+            if (this.#headNode.key === key) {
+                found = true;
+            } else {
+                let referenceNode = this.#headNode;
+                do {
+                    if (referenceNode.key === key) {
+                        found = true;
+                        break;
+                    }
+                    referenceNode = referenceNode.nextNode;
+                } while (referenceNode !== null);
+            }
+            
+        }
+
+        return found;
+    }
+
     find(value) {
         let index = 0
 
