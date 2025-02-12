@@ -1,4 +1,4 @@
-import { ModifiedLinkedList } from "./modifiedLinkedList";
+import { ModifiedLinkedList } from "./modifiedLinkedList.js";
 
 class HashMap {
     #loadFactor;
@@ -20,19 +20,20 @@ class HashMap {
           hashCode = primeNumber * hashCode + key.charCodeAt(i);
         }
      
-        return hashCode;
+        return hashCode % this.#capacity;
     }
 
     set(key, value) {
-        const index = hash(key);
-        if (index < 0 || index >= buckets.length) {
+        const index = this.hash(key);
+        console.log(index);
+        if (index < 0 || index >= this.#buckets.length) {
             throw new Error("Trying to access index out of bounds");
         }
         this.#buckets[index].append(key, value);
     }
 
     get(key) {
-        const index = hash(key);
+        const index = this.hash(key);
         if (index < 0 || index >= this.#buckets.length) {
             throw new Error("Trying to access index out of bounds");
         }
@@ -40,23 +41,32 @@ class HashMap {
     }
 
     has(key) {
-        const index = hash(key);
-        if (index < 0 || index >= buckets.length) {
+        const index = this.hash(key);
+        if (index < 0 || index >= this.#buckets.length) {
             throw new Error("Trying to access index out of bounds");
         }
         return this.#buckets[index].containsWithKey(key);
     }
 
-    remove(key) { // TODO: this and the future stuff
-        const index = hash(key);
-        if (index < 0 || index >= buckets.length) {
+    remove(key) {
+        const index = this.hash(key);
+        if (index < 0 || index >= this.#buckets.length) {
             throw new Error("Trying to access index out of bounds");
         }
-        return this.#buckets[index].splice(this.#buckets[index].indexOf());
+
+        this.#buckets[index].remove(key);
     }
 
     length() {
+        let length = 0;
 
+        this.#buckets.forEach(bucket => {
+            bucket.getNodes().forEach(node => {
+                length++;
+            })
+        })
+
+        return length;
     }
 
     clear() {
@@ -65,15 +75,59 @@ class HashMap {
     }
 
     keys() {
+        let keysArray = [];
 
+        this.#buckets.forEach(bucket => {
+            bucket.getNodes().forEach(node => {
+                keysArray.push(node.key);
+            })
+        })
+
+        return keysArray;
     }
 
     values() {
+        let valuesArray = [];
 
+        this.#buckets.forEach(bucket => {
+            bucket.getNodes().forEach(node => {
+                valuesArray.push(node.value);
+            })
+        })
+
+        return valuesArray;
     }
 
     entries() {
-        
+        let entries = [];
+
+        this.#buckets.forEach(bucket => {
+            if (bucket.head() !== null) {
+                bucket.getNodes().forEach(node => {
+                    entries.push([node.key, node.value]);
+                })
+            }
+        })
+
+        return entries;
     }
-     
 }
+
+const test = new HashMap()
+test.set('apple', 'red')
+test.set('banana', 'yellow')
+test.set('carrot', 'orange')
+test.set('dog', 'brown')
+test.set('elephant', 'gray')
+test.set('frog', 'green')
+test.set('grape', 'purple')
+test.set('hat', 'black')
+test.set('ice cream', 'white')
+test.set('jacket', 'blue')
+test.set('kite', 'pink')
+test.set('lion', 'golden')
+
+console.log(test.values());
+console.log(test.keys());
+console.log(test.entries());
+console.log(test.length());

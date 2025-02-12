@@ -16,7 +16,7 @@ class Node {
     set key(k) { this.#key = k; };
 }
 
-class LinkedList {
+class ModifiedLinkedList {
     #headNode;
 
     constructor() {
@@ -187,6 +187,35 @@ class LinkedList {
         }
 
         return index;
+    }
+
+    remove(key) {
+        let referenceNode = this.#headNode;
+        let previousNode = null;
+        for (let i = 0; i < findWithKey(key); i++) {
+            previousNode = referenceNode;
+            referenceNode = referenceNode.nextNode;
+        }
+
+        previousNode.nextNode = null;
+        if (referenceNode.nextNode !== null) {
+            previousNode.nextNode = referenceNode.nextNode;
+        }
+    }
+
+    getNodes() {
+        let nodes = [];
+
+        let referenceNode = null;
+        if (this.#headNode !== null) {
+            referenceNode = this.#headNode;
+            while (referenceNode.nextNode !== null) {
+                nodes.push(referenceNode);
+                referenceNode = referenceNode.nextNode;
+            }
+        }
+
+        return nodes;
     }
 
     toString() {
