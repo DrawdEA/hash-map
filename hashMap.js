@@ -25,7 +25,6 @@ class HashMap {
 
     set(key, value) {
         const index = this.hash(key);
-        console.log(index);
         if (index < 0 || index >= this.#buckets.length) {
             throw new Error("Trying to access index out of bounds");
         }
@@ -138,7 +137,13 @@ test.set('jacket', 'blue');
 test.set('kite', 'pink');
 test.set('lion', 'golden');
 console.log(test.entries());
+
 test.set('bird', 'shirt');
 console.log(test.entries());
+
 test.set('bird', 'amazing'); // Should replace the key value pair bird - shirt
+console.log(test.entries());
+
+test.remove('bird');
+test.remove('lion');
 console.log(test.entries());

@@ -202,15 +202,21 @@ class ModifiedLinkedList {
 
     remove(key) {
         let referenceNode = this.#headNode;
-        let previousNode = null;
-        for (let i = 0; i < findWithKey(key); i++) {
-            previousNode = referenceNode;
-            referenceNode = referenceNode.nextNode;
-        }
+        if (referenceNode !== null) {
+            let previousNode = null;
+            for (let i = 0; i < this.findWithKey(key); i++) {
+                previousNode = referenceNode;
+                referenceNode = referenceNode.nextNode;
+            }
 
-        previousNode.nextNode = null;
-        if (referenceNode.nextNode !== null) {
-            previousNode.nextNode = referenceNode.nextNode;
+            if (previousNode !== null) {
+                previousNode.nextNode = null;
+            } else {
+                this.#headNode = null;
+            }
+            if (referenceNode.nextNode !== null) {
+                previousNode.nextNode = referenceNode.nextNode;
+            }
         }
     }
 
