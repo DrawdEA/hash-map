@@ -35,10 +35,21 @@ class ModifiedLinkedList {
             this.#headNode = newNode;
         } else {
             let referenceNode = this.#headNode;
-            while (referenceNode.nextNode !== null) {
+            let changedValue = false;
+            if (referenceNode.key == key) {
+                referenceNode.value = value;
+                changedValue = true;
+            } 
+            while (referenceNode.nextNode !== null && !changedValue) {
                 referenceNode = referenceNode.nextNode;
+                if (referenceNode.key == key) {
+                    referenceNode.value = value;
+                    changedValue = true;
+                } 
             }
-            referenceNode.nextNode = newNode;
+            if (!changedValue) {
+                referenceNode.nextNode = newNode;
+            }
         }
     }
 
@@ -209,9 +220,10 @@ class ModifiedLinkedList {
         let referenceNode = null;
         if (this.#headNode !== null) {
             referenceNode = this.#headNode;
+            nodes.push(referenceNode);
             while (referenceNode.nextNode !== null) {
-                nodes.push(referenceNode);
                 referenceNode = referenceNode.nextNode;
+                nodes.push(referenceNode);
             }
         }
 

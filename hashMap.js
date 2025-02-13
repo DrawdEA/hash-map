@@ -19,7 +19,7 @@ class HashMap {
         for (let i = 0; i < key.length; i++) {
           hashCode = primeNumber * hashCode + key.charCodeAt(i);
         }
-     
+        
         return hashCode % this.#capacity;
     }
 
@@ -30,6 +30,16 @@ class HashMap {
             throw new Error("Trying to access index out of bounds");
         }
         this.#buckets[index].append(key, value);
+
+        // If the amount of nodes have surpassed the load factor, expand the amount of buckets.
+        if (this.length() / this.#capacity >= this.#loadFactor) {
+            this.#capacity = this.#capacity * 2;
+            const entries = this.entries();
+            this.clear();
+            entries.forEach(pair => {
+                this.set(pair[0], pair[1]);
+            })
+        }
     }
 
     get(key) {
@@ -113,21 +123,22 @@ class HashMap {
     }
 }
 
-const test = new HashMap()
-test.set('apple', 'red')
-test.set('banana', 'yellow')
-test.set('carrot', 'orange')
-test.set('dog', 'brown')
-test.set('elephant', 'gray')
-test.set('frog', 'green')
-test.set('grape', 'purple')
-test.set('hat', 'black')
-test.set('ice cream', 'white')
-test.set('jacket', 'blue')
-test.set('kite', 'pink')
-test.set('lion', 'golden')
-
-console.log(test.values());
-console.log(test.keys());
+// Testing the hash map.
+const test = new HashMap();
+test.set('apple', 'red');
+test.set('banana', 'yellow');
+test.set('carrot', 'orange');
+test.set('dog', 'brown');
+test.set('elephant', 'gray');
+test.set('frog', 'green');
+test.set('grape', 'purple');
+test.set('hat', 'black');
+test.set('ice cream', 'white');
+test.set('jacket', 'blue');
+test.set('kite', 'pink');
+test.set('lion', 'golden');
 console.log(test.entries());
-console.log(test.length());
+test.set('bird', 'shirt');
+console.log(test.entries());
+test.set('bird', 'amazing'); // Should replace the key value pair bird - shirt
+console.log(test.entries());
